@@ -6,67 +6,229 @@
 <title>Mr. Bean's Basics in Education and Learning</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;overflow:hidden;font-family:'Comic Sans MS',cursive}
-#gameCanvas{display:block;width:100vw;height:100vh}
+body{background:#1a0a00;overflow:hidden;font-family:'Comic Sans MS',cursive}
+#c{display:block;width:100vw;height:100vh}
 #ui{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10}
-#notebooks{position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.7);color:#fff;padding:8px 14px;border:3px solid #f0c040;border-radius:4px;font-size:18px;font-weight:bold}
-#stamina{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);width:200px;height:18px;background:#333;border:2px solid #fff;border-radius:3px}
-#staminaBar{height:100%;width:100%;background:#4af;border-radius:2px;transition:width 0.1s}
-#staminaLabel{position:absolute;bottom:42px;left:50%;transform:translateX(-50%);color:#fff;font-size:14px;font-weight:bold}
-#crosshair{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:28px;text-shadow:0 0 3px #000}
-#message{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.85);color:#f0c040;padding:20px 30px;border:4px solid #f0c040;border-radius:8px;font-size:22px;text-align:center;display:none;max-width:420px}
-#titleScreen{position:fixed;top:0;left:0;width:100%;height:100%;background:#1a0a00;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100}
-#titleScreen h1{font-size:52px;color:#f0c040;text-shadow:4px 4px 0 #8b6000,6px 6px 0 #000;text-align:center;margin-bottom:10px;font-family:'Comic Sans MS',cursive;letter-spacing:2px}
-#titleScreen h2{font-size:22px;color:#fff;text-shadow:2px 2px 0 #000;margin-bottom:40px;font-family:'Comic Sans MS',cursive}
-#titleScreen .monkey-face{font-size:120px;margin-bottom:20px;filter:drop-shadow(0 0 20px #f00)}
-#startBtn{padding:18px 50px;font-size:28px;font-family:'Comic Sans MS',cursive;background:#f0c040;border:4px solid #8b6000;border-radius:8px;cursor:pointer;color:#3a1a00;font-weight:bold;pointer-events:all;transition:transform 0.1s}
-#startBtn:hover{transform:scale(1.05);background:#ffd060}
-#gameOver{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(180,0,0,0.95);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:100}
-#gameOver h1{font-size:80px;color:#fff;text-shadow:4px 4px 0 #000;font-family:'Comic Sans MS',cursive;animation:shake 0.3s infinite}
-#gameOver .face{font-size:100px;margin:20px}
-#gameOver p{color:#ffd;font-size:24px;margin:10px}
-#gameOver button{margin-top:30px;padding:15px 40px;font-size:24px;font-family:'Comic Sans MS',cursive;background:#f0c040;border:4px solid #000;border-radius:8px;cursor:pointer;pointer-events:all}
-#winScreen{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,100,0,0.95);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:100}
-#winScreen h1{font-size:70px;color:#ff0;text-shadow:4px 4px 0 #000;font-family:'Comic Sans MS',cursive}
-#winScreen button{margin-top:30px;padding:15px 40px;font-size:24px;font-family:'Comic Sans MS',cursive;background:#f0c040;border:4px solid #000;border-radius:8px;cursor:pointer;pointer-events:all}
-#beanAlert{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(255,0,0,0);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s;pointer-events:none}
-#beanAlertText{color:#f00;font-size:48px;font-weight:bold;text-shadow:3px 3px 0 #000;font-family:'Comic Sans MS',cursive;display:none}
-.instructions{color:#aaa;font-size:14px;margin-top:20px;text-align:center;font-family:'Comic Sans MS',cursive}
-@keyframes shake{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
-#mrBeanSprite{position:absolute;bottom:0;left:50%;transform:translateX(-50%);display:none;pointer-events:none}
-#itemHeld{position:absolute;bottom:30px;right:30px;background:rgba(0,0,0,0.7);color:#fff;padding:8px 14px;border:2px solid #fff;border-radius:4px;font-size:16px;display:none}
+#nb{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.8);color:#f0c040;padding:8px 14px;border:3px solid #f0c040;border-radius:4px;font-size:20px;font-weight:bold}
+#sbar{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);width:220px;height:20px;background:#333;border:3px solid #fff;border-radius:4px}
+#sf{height:100%;width:100%;background:#4af;border-radius:2px;transition:width .1s}
+#slbl{position:absolute;bottom:44px;left:50%;transform:translateX(-50%);color:#fff;font-size:14px;font-weight:bold}
+#ch{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:32px;text-shadow:0 0 4px #000;user-select:none}
+#msg{position:absolute;top:40%;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:#f0c040;padding:16px 24px;border:4px solid #f0c040;border-radius:8px;font-size:20px;text-align:center;display:none;max-width:440px;z-index:20}
+#title{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(180deg,#1a0a00,#3a1500);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100}
+#title h1{font-size:54px;color:#f0c040;text-shadow:4px 4px 0 #8b6000,7px 7px 0 #000;margin-bottom:8px;text-align:center}
+#title h2{font-size:22px;color:#ffd;margin-bottom:40px;text-shadow:2px 2px 0 #000}
+#title .mf{font-size:130px;margin-bottom:16px;filter:drop-shadow(0 0 30px #f00) drop-shadow(0 0 60px #800)}
+#sbtn{padding:18px 55px;font-size:30px;font-family:'Comic Sans MS',cursive;background:#f0c040;border:5px solid #8b6000;border-radius:10px;cursor:pointer;color:#3a1a00;font-weight:bold;pointer-events:all;box-shadow:0 6px 0 #5a3000;transition:all .1s}
+#sbtn:hover{transform:translateY(-3px);background:#ffd060;box-shadow:0 9px 0 #5a3000}
+#go{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(160,0,0,.97);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:100}
+#go h1{font-size:90px;color:#fff;text-shadow:5px 5px 0 #000;font-family:'Comic Sans MS',cursive;animation:shk .25s infinite}
+#go p{color:#ffd;font-size:26px;margin:8px}
+#win{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,80,0,.97);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:100}
+#win h1{font-size:80px;color:#ff0;text-shadow:5px 5px 0 #000}
+#win p{color:#fff;font-size:24px;margin:10px}
+.rbtn{margin-top:28px;padding:16px 44px;font-size:26px;font-family:'Comic Sans MS',cursive;background:#f0c040;border:4px solid #000;border-radius:8px;cursor:pointer;pointer-events:all;font-weight:bold}
+#ba{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;transition:opacity .2s;pointer-events:none;display:flex;align-items:center;justify-content:center}
+#bat{color:#f00;font-size:50px;font-weight:bold;text-shadow:3px 3px 0 #000;display:none;animation:pulse .5s infinite alternate}
+.inst{color:#ccc;font-size:15px;margin-top:18px;text-align:center}
+@keyframes shk{0%,100%{transform:rotate(-2deg) scale(1.02)}50%{transform:rotate(2deg) scale(.98)}}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.1)}}
 </style>
 </head>
 <body>
-<canvas id="gameCanvas"></canvas>
+<canvas id="c"></canvas>
 <div id="ui">
-  <div id="notebooks">📓 Notebooks: <span id="nbCount">0</span> / 7</div>
-    <div id="staminaLabel">STAMINA</div>
-      <div id="stamina"><div id="staminaBar"></div></div>
-        <div id="crosshair">+</div>
-          <div id="message"></div>
-            <div id="beanAlert"><div id="beanAlertText">🐒 MR. BEAN IS COMING!!</div></div>
-              <div id="itemHeld">Holding: <span id="itemName"></span></div>
-              </div>
-              <div id="titleScreen">
-                <div class="monkey-face">🐒</div>
-                  <h1>Mr. Bean's Basics</h1>
-                    <h2>in Education and Learning</h2>
-                      <button id="startBtn" onclick="startGame()">START GAME</button>
-                        <div class="instructions">WASD = Move &nbsp;|&nbsp; Mouse = Look &nbsp;|&nbsp; E = Interact &nbsp;|&nbsp; Shift = Run</div>
-                          <div class="instructions">Collect all 7 notebooks before Mr. Bean catches you!</div>
-                          </div>
-                          <div id="gameOver">
-                            <div class="face">🐒</div>
-                              <h1>YOU'RE CAUGHT!</h1>
-                                <p>Mr. Bean got you!</p>
-                                  <button onclick="location.reload()">TRY AGAIN</button>
-                                  </div>
-                                  <div id="winScreen">
-                                    <div style="font-size:80px">🎉</div>
-                                      <h1>YOU ESCAPED!</h1>
-                                        <p style="color:#fff;font-size:20px">You collected all 7 notebooks!</p>
-                                          <button onclick="location.reload()">PLAY AGAIN</button>
-                                          </div>
-                                          <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-                                          <script>
+  <div id="nb">NOTEBOOKS: <span id="nbc">0</span> / 7</div>
+  <div id="slbl">STAMINA</div>
+  <div id="sbar"><div id="sf"></div></div>
+  <div id="ch">+</div>
+  <div id="msg"></div>
+  <div id="ba"><div id="bat">MR. BEAN IS CLOSE!!</div></div>
+</div>
+<div id="title">
+  <div class="mf">&#x1F412;</div>
+  <h1>Mr. Bean's Basics</h1>
+  <h2>in Education and Learning</h2>
+  <button id="sbtn" onclick="startGame()">START GAME</button>
+  <div class="inst">WASD = Move | Mouse = Look | E = Grab Notebook | Shift = Sprint</div>
+  <div class="inst">Collect all 7 notebooks then escape through the EXIT door!</div>
+</div>
+<div id="go">
+  <div style="font-size:100px">&#x1F412;</div>
+  <h1>CAUGHT!!</h1>
+  <p>Mr. Bean got you with his ruler!</p>
+  <button class="rbtn" onclick="location.reload()">TRY AGAIN</button>
+</div>
+<div id="win">
+  <div style="font-size:90px">&#x1F389;</div>
+  <h1>YOU ESCAPED!</h1>
+  <p>You outsmarted Mr. Bean!</p>
+  <button class="rbtn" onclick="location.reload()">PLAY AGAIN</button>
+</div><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const canvas=document.getElementById('c');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:false});
+renderer.setSize(innerWidth,innerHeight);
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x8ab4f8);
+scene.fog=new THREE.Fog(0x8ab4f8,8,45);
+const cam=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,.1,100);
+cam.position.set(6,1.6,6);
+scene.add(new THREE.AmbientLight(0xffffff,.6));
+const dl=new THREE.DirectionalLight(0xffffff,.7);
+dl.position.set(8,12,8);
+scene.add(dl);
+const S=4,M=20;
+const map=[];
+for(let i=0;i<M;i++){map[i]=[];for(let j=0;j<M;j++)map[i][j]=(i==0||j==0||i==M-1||j==M-1)?1:0;}
+[[3,2],[3,3],[4,2],[5,5],[5,6],[6,5],[7,2],[7,3],[8,7],[8,8],[9,7],[10,3],[10,4],[11,10],[11,11],[12,3],[13,6],[13,7],[14,6],[14,12],[14,13],[15,12],[16,8],[16,9],[17,8],[3,13],[3,14],[4,13],[6,15],[6,16],[7,15],[9,12],[10,11],[11,14],[11,15],[12,14],[15,16],[15,17],[16,16]].forEach(([r,c])=>{if(r<M&&c<M)map[r][c]=1;});
+const wm=new THREE.MeshLambertMaterial({color:0xf0e8d0});
+const fg=new THREE.BoxGeometry(S,3.2,S);
+for(let r=0;r<M;r++)for(let c=0;c<M;c++)if(map[r][c]){const w=new THREE.Mesh(fg,wm);w.position.set(c*S+S/2,1.6,r*S+S/2);scene.add(w);}
+const fl=new THREE.Mesh(new THREE.PlaneGeometry(M*S,M*S),new THREE.MeshLambertMaterial({color:0xc8a870}));
+fl.rotation.x=-Math.PI/2;fl.position.set(M*S/2,0,M*S/2);scene.add(fl);
+const cl=new THREE.Mesh(new THREE.PlaneGeometry(M*S,M*S),new THREE.MeshLambertMaterial({color:0xf0ece0}));
+cl.rotation.x=Math.PI/2;cl.position.set(M*S/2,3.2,M*S/2);scene.add(cl);
+for(let i=3;i<M-3;i+=5)for(let j=3;j<M-3;j+=5)if(!map[i][j]){const pl=new THREE.PointLight(0xfff0d0,.9,14);pl.position.set(j*S+S/2,3,i*S+S/2);scene.add(pl);}
+function mkNoteTex(){
+  const cv=document.createElement('canvas');cv.width=64;cv.height=80;
+  const x=cv.getContext('2d');
+  x.fillStyle='#fffde7';x.fillRect(0,0,64,80);
+  x.fillStyle='#e53935';x.fillRect(0,0,9,80);
+  for(let y=18;y<78;y+=10){x.strokeStyle='#1565c0';x.lineWidth=1.5;x.beginPath();x.moveTo(11,y);x.lineTo(56,y);x.stroke();}
+  x.fillStyle='#333';x.font='bold 10px Arial';x.fillText('NOTE',12,14);
+  return new THREE.CanvasTexture(cv);
+}
+const nbTx=mkNoteTex(),nbMt=new THREE.MeshLambertMaterial({map:nbTx,side:THREE.DoubleSide});
+const nbks=[],nbPos=[[2,2],[5,4],[8,2],[3,9],[10,9],[15,4],[12,14],[7,14],[16,14]];
+nbPos.slice(0,7).forEach((p,i)=>{
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(.55,.7),nbMt);
+  m.position.set(p[1]*S+S/2,1.1,p[0]*S+S/2);
+  m.userData={type:'nb',idx:i,got:false};
+  scene.add(m);nbks.push(m);
+});
+const its=[];
+[[4,8],[9,6],[13,2],[6,12],[15,9]].forEach((p,i)=>{
+  const t=i%2?'soda':'tape';
+  const m=new THREE.Mesh(new THREE.BoxGeometry(.35,.35,.35),new THREE.MeshLambertMaterial({color:t=='soda'?0x2196F3:0x4CAF50}));
+  m.position.set(p[1]*S+S/2,.75,p[0]*S+S/2);
+  m.userData={type:'item',it:t,got:false};
+  scene.add(m);its.push(m);
+});function mkBeanTex(){
+  const cv=document.createElement('canvas');cv.width=128;cv.height=256;
+  const x=cv.getContext('2d');
+  x.fillStyle='#8B4513';x.fillRect(20,100,88,90);
+  x.fillStyle='#3a2818';x.fillRect(20,175,38,75);x.fillRect(70,175,38,75);
+  x.fillStyle='#c68642';x.fillRect(50,78,28,26);
+  x.fillStyle='#c68642';x.beginPath();x.ellipse(64,52,40,44,0,0,Math.PI*2);x.fill();
+  x.fillStyle='#d4956a';x.beginPath();x.ellipse(64,70,24,17,0,0,Math.PI*2);x.fill();
+  x.fillStyle='#fff';x.beginPath();x.ellipse(44,42,13,15,0,0,Math.PI*2);x.fill();
+  x.beginPath();x.ellipse(84,42,13,15,0,0,Math.PI*2);x.fill();
+  x.fillStyle='#cc0000';x.beginPath();x.ellipse(44,44,8,9,0,0,Math.PI*2);x.fill();
+  x.beginPath();x.ellipse(84,44,8,9,0,0,Math.PI*2);x.fill();
+  x.fillStyle='#000';x.beginPath();x.ellipse(44,44,4,5,0,0,Math.PI*2);x.fill();
+  x.beginPath();x.ellipse(84,44,4,5,0,0,Math.PI*2);x.fill();
+  x.fillStyle='#fff';x.beginPath();x.ellipse(44,41,2,2,0,0,Math.PI*2);x.fill();
+  x.beginPath();x.ellipse(84,41,2,2,0,0,Math.PI*2);x.fill();
+  x.strokeStyle='#1a0500';x.lineWidth=5;
+  x.beginPath();x.moveTo(30,24);x.lineTo(56,33);x.stroke();
+  x.beginPath();x.moveTo(72,33);x.lineTo(98,24);x.stroke();
+  x.fillStyle='#4a1a00';x.beginPath();x.ellipse(54,64,5,4,0,0,Math.PI*2);x.fill();
+  x.beginPath();x.ellipse(74,64,5,4,0,0,Math.PI*2);x.fill();
+  x.fillStyle='#6b0000';x.beginPath();x.moveTo(40,76);x.quadraticCurveTo(64,94,88,76);x.lineTo(84,72);x.quadraticCurveTo(64,86,44,72);x.closePath();x.fill();
+  x.fillStyle='#fff';[44,57,70].forEach(xp=>{x.fillRect(xp,72,9,11);});
+  x.fillStyle='#c68642';x.beginPath();x.ellipse(24,48,12,16,0,0,Math.PI*2);x.fill();
+  x.beginPath();x.ellipse(104,48,12,16,0,0,Math.PI*2);x.fill();
+  x.fillStyle='#d4956a';x.beginPath();x.ellipse(24,48,7,10,0,0,Math.PI*2);x.fill();
+  x.beginPath();x.ellipse(104,48,7,10,0,0,Math.PI*2);x.fill();
+  x.fillStyle='#c68642';x.beginPath();x.moveTo(20,108);x.lineTo(-4,175);x.lineTo(10,180);x.lineTo(30,116);x.fill();
+  x.beginPath();x.moveTo(108,108);x.lineTo(132,175);x.lineTo(118,180);x.lineTo(98,116);x.fill();
+  x.fillStyle='#f4d03f';x.fillRect(110,155,12,70);
+  x.strokeStyle='#8B6914';x.lineWidth=2;x.strokeRect(110,155,12,70);
+  x.fillStyle='#c0392b';for(let i=0;i<7;i++)x.fillRect(110,159+i*10,12,3);
+  return new THREE.CanvasTexture(cv);
+}
+const bTx=mkBeanTex();
+const bMt=new THREE.SpriteMaterial({map:bTx,transparent:true});
+const bean=new THREE.Sprite(bMt);
+bean.scale.set(1.3,2.6,1);
+bean.position.set(10*S,1.3,4*S);
+scene.add(bean);
+const exit=new THREE.Mesh(new THREE.BoxGeometry(S*.85,3.1,.35),new THREE.MeshLambertMaterial({color:0x00aa44,emissive:new THREE.Color(0,0,0)}));
+exit.position.set(17*S+S/2,1.55,17*S+S/2);scene.add(exit);
+let nbGot=0,stam=100,gActive=false,gOver=false,won=false;
+let bSpd=0.022,bAng=0;
+const keys={};let yaw=0,pitch=0,locked=false,msgTmr=0;
+function isWall(x,z){const c=Math.floor(x/S),r=Math.floor(z/S);if(c<0||r<0||c>=M||r>=M)return true;return map[r][c]===1;}
+function showMsg(t,d){const e=document.getElementById('msg');e.textContent=t;e.style.display='block';clearTimeout(msgTmr);msgTmr=setTimeout(()=>e.style.display='none',d);}
+function startGame(){document.getElementById('title').style.display='none';gActive=true;canvas.requestPointerLock();}
+document.addEventListener('pointerlockchange',()=>locked=document.pointerLockElement===canvas);
+canvas.addEventListener('click',()=>{if(gActive&&!gOver&&!won)canvas.requestPointerLock();});
+document.addEventListener('mousemove',e=>{if(!locked)return;yaw-=e.movementX*.002;pitch-=e.movementY*.002;pitch=Math.max(-1,Math.min(1,pitch));});
+document.addEventListener('keydown',e=>{keys[e.code]=true;if(e.code=='KeyE'&&gActive&&!gOver&&!won)interact();});
+document.addEventListener('keyup',e=>keys[e.code]=false);function interact(){
+  const d=new THREE.Vector3(-Math.sin(yaw)*Math.cos(pitch),Math.sin(pitch),-Math.cos(yaw)*Math.cos(pitch)).normalize();
+  const ray=new THREE.Raycaster(cam.position,d,0,2.8);
+  const hits=ray.intersectObjects([...nbks.filter(n=>!n.userData.got),...its.filter(t=>!t.userData.got)]);
+  if(!hits.length)return;
+  const o=hits[0].object;
+  if(o.userData.type=='nb'&&!o.userData.got){
+    o.userData.got=true;o.visible=false;nbGot++;
+    document.getElementById('nbc').textContent=nbGot;
+    bSpd+=.009;bAng++;
+    const qs=["1 notebook! Mr. Bean notices...","2 notebooks! He gets angry!","3 notebooks! *distant screeching*","4 notebooks! He runs faster!","5 notebooks! MR. BEAN IS FURIOUS!","6 notebooks! He is right behind you!","ALL 7! RUN TO THE GREEN EXIT DOOR!!"];
+    showMsg(qs[nbGot-1]||'Go!',2500);
+    if(nbGot>=7){exit.material.color.set(0x00ff66);exit.material.emissive.set(.1,.5,.1);showMsg('ALL 7 NOTEBOOKS! Find the GREEN EXIT DOOR NOW!!',3500);}
+  } else if(o.userData.type=='item'&&!o.userData.got){
+    o.userData.got=true;o.visible=false;
+    if(o.userData.it=='soda'){stam=100;showMsg('Energy Soda! Stamina fully restored!',2000);}
+    else{bSpd=Math.max(.012,bSpd-.012);showMsg("Keys! Mr. Bean slowed down!",2000);}
+  }
+}
+const bQts=['SCREECH!','NO RUNNING!','MATH IS FUN!','MONKEY SHRIEK!','YOU WILL NOT ESCAPE!','GIVE ME THOSE NOTEBOOKS!'];
+let lastBQ=0;
+function updateBean(){
+  if(!gActive||gOver||won)return;
+  const px=cam.position.x,pz=cam.position.z,bx=bean.position.x,bz=bean.position.z;
+  const dx=px-bx,dz=pz-bz,dist=Math.sqrt(dx*dx+dz*dz);
+  const spd=bSpd*(bAng*.5+1);
+  let nx=bx+dx/dist*spd,nz=bz+dz/dist*spd;
+  if(isWall(nx,nz)){nx=bx+(-dz/dist)*spd;if(isWall(nx,bz))nx=bx;nz=bz+(dx/dist)*spd;if(isWall(bx,nz))nz=bz;}
+  bean.position.x=nx;bean.position.z=nz;
+  if(dist<1.3){gOver=true;gActive=false;document.exitPointerLock();document.getElementById('go').style.display='flex';return;}
+  const ba=document.getElementById('ba'),bat=document.getElementById('bat');
+  if(dist<9){bat.style.display='block';ba.style.opacity=Math.min(.85,(9-dist)/9*.7);}
+  else{bat.style.display='none';ba.style.opacity=0;}
+  const now=Date.now();
+  if(dist<14&&now-lastBQ>3200){lastBQ=now;const el=document.createElement('div');el.style.cssText='position:fixed;top:28%;left:50%;transform:translateX(-50%);color:#ff3333;font-size:34px;font-weight:bold;font-family:Comic Sans MS,cursive;text-shadow:3px 3px 0 #000;z-index:25;pointer-events:none';el.textContent=bQts[Math.floor(Math.random()*bQts.length)];document.body.appendChild(el);setTimeout(()=>el.remove(),2200);}
+}
+function updatePlayer(){
+  if(!gActive||gOver||won)return;
+  const run=keys.ShiftLeft&&stam>0;
+  const spd=run?.14:.08;
+  stam=run?Math.max(0,stam-.4):Math.min(100,stam+.15);
+  document.getElementById('sf').style.width=stam+'%';
+  const fwd=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
+  const rt=new THREE.Vector3(-Math.cos(yaw),0,Math.sin(yaw));
+  const mv=new THREE.Vector3();
+  if(keys.KeyW)mv.add(fwd);
+  if(keys.KeyS)mv.sub(fwd);
+  if(keys.KeyA)mv.sub(rt);
+  if(keys.KeyD)mv.add(rt);
+  if(mv.length()){mv.normalize().multiplyScalar(spd);const nx=cam.position.x+mv.x,nz=cam.position.z+mv.z;if(!isWall(nx+.3,cam.position.z)&&!isWall(nx-.3,cam.position.z))cam.position.x=nx;if(!isWall(cam.position.x+.3,nz)&&!isWall(cam.position.x-.3,nz))cam.position.z=nz;cam.position.y=1.6+Math.sin(Date.now()*.011)*.045;}
+  cam.rotation.order='YXZ';cam.rotation.y=yaw;cam.rotation.x=pitch;
+  nbks.forEach(n=>{if(!n.userData.got)n.lookAt(cam.position);});
+  its.forEach(t=>{if(!t.userData.got)t.rotation.y+=.025;});
+  if(nbGot>=7){const ex=exit.position,d2=Math.sqrt((cam.position.x-ex.x)**2+(cam.position.z-ex.z)**2);if(d2<2.2){won=true;gActive=false;document.exitPointerLock();document.getElementById('win').style.display='flex';}}
+}
+let ep=0;
+function loop(t){
+  requestAnimationFrame(loop);
+  if(gActive&&!gOver&&!won){updatePlayer();updateBean();ep+=.04;if(nbGot>=7)exit.material.emissiveIntensity=.4+Math.sin(ep)*.3;}
+  renderer.render(scene,cam);
+}
+loop(0);
+window.addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+</script>
+</body>
+</html>
